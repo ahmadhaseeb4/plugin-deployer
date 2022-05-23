@@ -82,7 +82,6 @@ if [[ "$BUILD_DIR" = false ]]; then
 	else
 		echo "ℹ︎ Using .gitattributes"
 
-    ls "Repository: $GITHUB_REPOSITORY"
     ls "Workspace: $GITHUB_WORKSPACE"
 		cd "$GITHUB_WORKSPACE"
 		echo "➤ Changing directory to GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
