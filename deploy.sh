@@ -27,8 +27,8 @@ fi
 
 SVN_URL=$URL
 svn checkout --username "$SVN_USERNAME" --password "$SVN_PASSWORD" "$SVN_URL"
-svn update --set-depth infinity assets
-svn update --set-depth infinity trunk
+#svn update --set-depth infinity assets
+#svn update --set-depth infinity trunk
 
 
 if [[ "$BUILD_DIR" = false ]]; then
