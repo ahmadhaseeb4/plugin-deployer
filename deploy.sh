@@ -141,7 +141,7 @@ svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@ > /dev/null
 
 # Copy tag locally to make this a single commit
 echo "➤ Copying tag..."
-svn cp "trunk" "tags/$VERSION"
+svn cp "trunk"
 echo "✓ Good so far!"
 
 # Fix screenshots getting force downloaded when clicking them
