@@ -85,22 +85,6 @@ if [[ "$BUILD_DIR" = false ]]; then
 		git config --global user.email "muhammadmubeenhamid@gmail.com"
 		git config --global user.name "Muhammad Mubeen Hamid"
 
-		# If there's no .gitattributes file, write a default one into place
-		if [[ ! -e "$GITHUB_WORKSPACE/.gitattributes" ]]; then
-			cat > "$GITHUB_WORKSPACE/.gitattributes" <<-EOL
-			/$ASSETS_DIR export-ignore
-			/.gitattributes export-ignore
-			/.gitignore export-ignore
-			/.github export-ignore
-			EOL
-
-			# Ensure we are in the $GITHUB_WORKSPACE directory, just in case
-			# The .gitattributes file has to be committed to be used
-			# Just don't push it to the origin repo :)
-			git add .gitattributes && git commit -m "Add .gitattributes file"
-			echo "➤ Added .gitattributes file"
-		fi
-
 		# This will exclude everything in the .gitattributes file with the export-ignore flag
 		git archive HEAD | tar x --directory="$TMP_DIR"
 
