@@ -115,7 +115,7 @@ if [[ "$BUILD_DIR" = false ]]; then
 
 		# Copy from clean copy to /trunk, excluding dotorg assets
 		# The --delete flag will delete anything in destination that no longer exists in source
-		rsync -rc "$TMP_DIR/" trunk/ --delete --delete-excluded
+		rsync -rc "$TMP_DIR/" / --delete --delete-excluded
 	fi
 else
 	echo "ℹ︎ Copying files from build directory..."
