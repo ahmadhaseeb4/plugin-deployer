@@ -83,6 +83,7 @@ if [[ "$BUILD_DIR" = false ]]; then
 		echo "ℹ︎ Using .gitattributes"
 
 		cd "$GITHUB_WORKSPACE"
+		echo "➤ Changing directory to GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
 
 		# "Export" a cleaned copy to a temp directory
 		TMP_DIR="${HOME}/archivetmp"
