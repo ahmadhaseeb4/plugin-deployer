@@ -26,5 +26,5 @@ if [[ -z "$SVN_PASSWORD" ]]; then
 fi
 
 SVN_URL=$URL
-svn checkout --depth immediates "$SVN_URL"
+svn checkout "$SVN_URL"
 echo "✓ Plugin deployed!"
