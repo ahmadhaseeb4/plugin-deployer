@@ -78,7 +78,7 @@ if [[ "$BUILD_DIR" = false ]]; then
 		echo "ℹ︎ Using .distignore"
 		# Copy from current branch to /trunk, excluding dotorg assets
 		# The --delete flag will delete anything in destination that no longer exists in source
-		rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" trunk/ --delete --delete-excluded
+		rsync -rc "$GITHUB_WORKSPACE/" --delete --delete-excluded
 	else
 		echo "ℹ︎ Using .gitattributes"
 
@@ -155,17 +155,7 @@ if test -d "$SVN_DIR/assets" && test -n "$(find "$SVN_DIR/assets" -maxdepth 1 -n
 fi
 
 svn status
-echo "✓ Good so far!"
-
 echo "➤ Committing files..."
 svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
-
-if $INPUT_GENERATE_ZIP; then
-  echo "Generating zip file..."
-  cd "$SVN_DIR/trunk" || exit
-  zip -r "${GITHUB_WORKSPACE}/${SLUG}.zip" .
-  echo "::set-output name=zip-path::${GITHUB_WORKSPACE}/${SLUG}.zip"
-  echo "✓ Zip file generated!"
-fi
 
 echo "✓ Plugin deployed!"
