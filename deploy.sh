@@ -25,10 +25,47 @@ if [[ -z "$SVN_PASSWORD" ]]; then
 	exit 1
 fi
 
+# Allow some ENV variables to be customized
+if [[ -z "$SLUG" ]]; then
+	SLUG=${GITHUB_REPOSITORY#*/}
+fi
+echo "ℹ︎ SLUG is $SLUG"
+
+# Does it even make sense for VERSION to be editable in a workflow definition?
+if [[ -z "$VERSION" ]]; then
+	VERSION="${GITHUB_REF#refs/tags/}"
+	VERSION="${VERSION#v}"
+fi
+echo "ℹ︎ VERSION is $VERSION"
+
+if [[ -z "$ASSETS_DIR" ]]; then
+	ASSETS_DIR=".wordpress-org"
+fi
+echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
+
+if [[ -z "$BUILD_DIR" ]] || [[ $BUILD_DIR == "./" ]]; then
+	BUILD_DIR=false
+elif [[ $BUILD_DIR == ./* ]]; then
+	BUILD_DIR=${BUILD_DIR:2}
+fi
+
+if [[ "$BUILD_DIR" != false ]]; then
+	if [[ $BUILD_DIR != /* ]]; then
+		BUILD_DIR="${GITHUB_WORKSPACE%/}/${BUILD_DIR%/}"
+	fi
+	echo "ℹ︎ BUILD_DIR is $BUILD_DIR"
+fi
+
 SVN_URL=$URL
-svn checkout --username "$SVN_USERNAME" --password "$SVN_PASSWORD" "$SVN_URL"
-#svn update --set-depth infinity assets
-#svn update --set-depth infinity trunk
+SVN_DIR="${HOME}/svn-${SLUG}"
+
+# Checkout just trunk and assets for efficiency
+# Tagging will be handled on the SVN level
+echo "➤ Checking out .org repository..."
+svn checkout --depth immediates "$SVN_URL" "$SVN_DIR"
+cd "$SVN_DIR"
+svn update --set-depth infinity assets
+svn update --set-depth infinity trunk
 
 
 if [[ "$BUILD_DIR" = false ]]; then
@@ -127,4 +164,5 @@ if $INPUT_GENERATE_ZIP; then
   echo "::set-output name=zip-path::${GITHUB_WORKSPACE}/${SLUG}.zip"
   echo "✓ Zip file generated!"
 fi
+
 echo "✓ Plugin deployed!"
