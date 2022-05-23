@@ -73,14 +73,7 @@ echo "✓ Directory changed"
 
 
 if [[ "$BUILD_DIR" = false ]]; then
-	echo "➤ Copying files..."
-	if [[ -e "$GITHUB_WORKSPACE/.distignore" ]]; then
-		echo "====================+> ℹ︎ Using .distignore"
-		# Copy from current branch to /trunk, excluding dotorg assets
-		# The --delete flag will delete anything in destination that no longer exists in source
-		rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" trunk/ --delete --delete-excluded
-	else
-		echo "ℹ︎ Using .gitattributes"
+		echo "=>>>>> ℹ︎ Using .gitattributes"
 
 		cd "$GITHUB_WORKSPACE"
 		echo "➤ Changing directory to GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
@@ -115,8 +108,7 @@ if [[ "$BUILD_DIR" = false ]]; then
 
 		# Copy from clean copy to /trunk, excluding dotorg assets
 		# The --delete flag will delete anything in destination that no longer exists in source
-		rsync -rc "$TMP_DIR/" / --delete --delete-excluded
-	fi
+		rsync -rc "$TMP_DIR/" trunk/ --delete --delete-excluded
 else
 	echo "ℹ︎ Copying files from build directory..."
 	rsync -rc "$BUILD_DIR/" trunk/ --delete --delete-excluded
