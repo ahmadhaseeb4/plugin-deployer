@@ -104,14 +104,14 @@ if [[ "$BUILD_DIR" = false ]]; then
 		# This will exclude everything in the .gitattributes file with the export-ignore flag
 		git archive HEAD | tar x --directory="$TMP_DIR"
 		echo "➤ Content of Temp Directory =============> $TMP_DIR"
-		ls "$TMP_DIR"
+		ls "$TMP_DIR :=> $TMP_DIR/trunk/"
 		echo "➤ Content of Temp Directory =============> ENDED!"
 
 		cd "$SVN_DIR"
 
 		# Copy from clean copy to /trunk, excluding dotorg assets
 		# The --delete flag will delete anything in destination that no longer exists in source
-		rsync -rc "$TMP_DIR/trunk" trunk/ --delete --delete-excluded
+		rsync -rc "$TMP_DIR/trunk/" trunk/ --delete --delete-excluded
 else
 	echo "ℹ︎ Copying files from build directory..."
 	rsync -rc "$BUILD_DIR/" trunk/ --delete --delete-excluded
