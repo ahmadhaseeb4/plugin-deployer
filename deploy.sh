@@ -63,6 +63,7 @@ SVN_DIR="${HOME}/svn-${SLUG}"
 # Tagging will be handled on the SVN level
 echo "➤ Checking out .org repository..."
 svn checkout --username "$SVN_USERNAME" --password "$SVN_PASSWORD" "$SVN_URL" "$SVN_DIR"
+echo "✓ Repository checked out"
 cd "$SVN_DIR"
 svn update --set-depth infinity assets
 svn update --set-depth infinity trunk
