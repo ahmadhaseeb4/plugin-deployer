@@ -89,8 +89,8 @@ if [[ "$BUILD_DIR" = false ]]; then
 		TMP_DIR="${HOME}/archivetmp"
 		mkdir "$TMP_DIR"
 
-		git config --global user.email "10upbot+github@10up.com"
-		git config --global user.name "10upbot on GitHub"
+		git config --global user.email "muhammadmubeenhamid@gmail.com"
+		git config --global user.name "Muhammad Mubeen Hamid"
 
 		# If there's no .gitattributes file, write a default one into place
 		if [[ ! -e "$GITHUB_WORKSPACE/.gitattributes" ]]; then
@@ -105,6 +105,7 @@ if [[ "$BUILD_DIR" = false ]]; then
 			# The .gitattributes file has to be committed to be used
 			# Just don't push it to the origin repo :)
 			git add .gitattributes && git commit -m "Add .gitattributes file"
+			echo "➤ Added .gitattributes file"
 		fi
 
 		# This will exclude everything in the .gitattributes file with the export-ignore flag
