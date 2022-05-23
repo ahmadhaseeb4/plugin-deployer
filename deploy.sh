@@ -65,8 +65,11 @@ echo "➤ Checking out .org repository..."
 svn checkout --username "$SVN_USERNAME" --password "$SVN_PASSWORD" "$SVN_URL" "$SVN_DIR"
 echo "✓ Repository checked out"
 cd "$SVN_DIR"
+echo "✓ Directory changed"
 svn update --set-depth infinity assets
+echo "✓ Assets directory set to infinity"
 svn update --set-depth infinity trunk
+echo "✓ Trunk directory set to infinity"
 
 
 if [[ "$BUILD_DIR" = false ]]; then
