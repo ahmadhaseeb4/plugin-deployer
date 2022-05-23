@@ -68,8 +68,8 @@ cd "$SVN_DIR"
 echo "✓ Directory changed"
 #svn update --set-depth infinity assets
 #echo "✓ Assets directory set to infinity"
-svn update --set-depth infinity trunk
-echo "✓ Trunk directory set to infinity"
+#svn update --set-depth infinity trunk
+#echo "✓ Trunk directory set to infinity"
 
 
 if [[ "$BUILD_DIR" = false ]]; then
