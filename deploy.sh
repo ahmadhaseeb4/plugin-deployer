@@ -103,6 +103,7 @@ if [[ "$BUILD_DIR" = false ]]; then
 
 		# This will exclude everything in the .gitattributes file with the export-ignore flag
 		git archive HEAD | tar x --directory="$TMP_DIR"
+		echo "➤ Temp Directory =============> $TMP_DIR"
 
 		cd "$SVN_DIR"
 
