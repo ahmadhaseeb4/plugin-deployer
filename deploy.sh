@@ -33,18 +33,18 @@ if [[ -z "$ASSETS_DIR" ]]; then
 fi
 echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
 
-#if [[ -z "$BUILD_DIR" ]] || [[ $BUILD_DIR == "./" ]]; then
-#	BUILD_DIR=false
-#elif [[ $BUILD_DIR == ./* ]]; then
-#	BUILD_DIR=${BUILD_DIR:2}
-#fi
-#
-#if [[ "$BUILD_DIR" != false ]]; then
-#	if [[ $BUILD_DIR != /* ]]; then
-#		BUILD_DIR="${GITHUB_WORKSPACE%/}/${BUILD_DIR%/}"
-#	fi
-#	echo "ℹ︎ BUILD_DIR is $BUILD_DIR"
-#fi
+if [[ -z "$BUILD_DIR" ]] || [[ $BUILD_DIR == "./" ]]; then
+	BUILD_DIR=false
+elif [[ $BUILD_DIR == ./* ]]; then
+	BUILD_DIR=${BUILD_DIR:2}
+fi
+
+if [[ "$BUILD_DIR" != false ]]; then
+	if [[ $BUILD_DIR != /* ]]; then
+		BUILD_DIR="${GITHUB_WORKSPACE%/}/${BUILD_DIR%/}"
+	fi
+	echo "ℹ︎ BUILD_DIR is $BUILD_DIR"
+fi
 
 SVN_URL=$URL
 SVN_DIR="${HOME}/svn-${SLUG}"
