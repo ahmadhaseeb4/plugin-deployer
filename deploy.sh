@@ -6,10 +6,6 @@
 # it does not exit with a 0, and I only care about the final exit.
 set -eo
 
-echo "$SVN_USERNAME"
-echo "$SVN_PASSWORD"
-echo "$URL"
-
 if [[ -z "$SVN_USERNAME" ]]; then
 	echo "Set the SVN_USERNAME secret, please."
 	exit 1
