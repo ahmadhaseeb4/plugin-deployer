@@ -33,18 +33,8 @@ if [[ -z "$ASSETS_DIR" ]]; then
 fi
 echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
 
-if [[ -z "$BUILD_DIR" ]] || [[ $BUILD_DIR == "./" ]]; then
-	BUILD_DIR=false
-elif [[ $BUILD_DIR == ./* ]]; then
-	BUILD_DIR=${BUILD_DIR:2}
-fi
-
-if [[ "$BUILD_DIR" != false ]]; then
-	if [[ $BUILD_DIR != /* ]]; then
-		BUILD_DIR="${GITHUB_WORKSPACE%/}/${BUILD_DIR%/}"
-	fi
-	echo "ℹ︎ BUILD_DIR is $BUILD_DIR"
-fi
+BUILD_DIR=${BUILD_DIR:2}
+BUILD_DIR="${GITHUB_WORKSPACE%/}/${BUILD_DIR%/}"
 
 SVN_URL=$URL
 SVN_DIR="${HOME}/svn-${SLUG}"
@@ -55,51 +45,43 @@ echo "➤ Checking out .org repository..."
 svn checkout --username "$SVN_USERNAME" --password "$SVN_PASSWORD" "$SVN_URL" "$SVN_DIR"
 echo "✓ Repository checked out"
 
+cd "$GITHUB_WORKSPACE"
+echo "➤ Changing directory to GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
 
-if [[ "$BUILD_DIR" = false ]]; then
-		echo "=>>>>> ℹ︎ Using .gitattributes"
+# "Export" a cleaned copy to a temp directory
+TMP_DIR="${HOME}/archivetmp"
+mkdir "$TMP_DIR"
 
-		cd "$GITHUB_WORKSPACE"
-		echo "➤ Changing directory to GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+git config --global user.email "muhammadmubeenhamid@gmail.com"
+git config --global user.name "Muhammad Mubeen Hamid"
 
-		# "Export" a cleaned copy to a temp directory
-		TMP_DIR="${HOME}/archivetmp"
-		mkdir "$TMP_DIR"
+# If there's no .gitattributes file, write a default one into place
+if [[ ! -e "$GITHUB_WORKSPACE/.gitattributes" ]]; then
+  cat > "$GITHUB_WORKSPACE/.gitattributes" <<-EOL
+  /$ASSETS_DIR export-ignore
+	/.gitattributes export-ignore
+	/.gitignore export-ignore
+	/.github export-ignore
+	EOL
 
-		git config --global user.email "muhammadmubeenhamid@gmail.com"
-		git config --global user.name "Muhammad Mubeen Hamid"
-
-		# If there's no .gitattributes file, write a default one into place
-		if [[ ! -e "$GITHUB_WORKSPACE/.gitattributes" ]]; then
-			cat > "$GITHUB_WORKSPACE/.gitattributes" <<-EOL
-			/$ASSETS_DIR export-ignore
-			/.gitattributes export-ignore
-			/.gitignore export-ignore
-			/.github export-ignore
-			EOL
-
-			# Ensure we are in the $GITHUB_WORKSPACE directory, just in case
-			# The .gitattributes file has to be committed to be used
-			# Just don't push it to the origin repo :)
-			git add .gitattributes && git commit -m "Add .gitattributes file"
-			echo "➤ Added .gitattributes file"
-		fi
-
-		# This will exclude everything in the .gitattributes file with the export-ignore flag
-		git archive HEAD | tar x --directory="$TMP_DIR"
-		echo "➤ Content of Temp Directory =============> $TMP_DIR"
-		ls "$TMP_DIR"/trunk
-		echo "➤ Content of Temp Directory =============> ENDED!"
-
-		cd "$SVN_DIR"
-
-		# Copy from clean copy to /trunk, excluding dotorg assets
-		# The --delete flag will delete anything in destination that no longer exists in source
-		rsync -rc "$TMP_DIR/trunk/" trunk/ --delete --delete-excluded
-else
-	echo "ℹ︎ Copying files from build directory..."
-	rsync -rc "$BUILD_DIR/" trunk/ --delete --delete-excluded
+  # Ensure we are in the $GITHUB_WORKSPACE directory, just in case
+  # The .gitattributes file has to be committed to be used
+  # Just don't push it to the origin repo :)
+  git add .gitattributes && git commit -m "Add .gitattributes file"
+  echo "➤ Added .gitattributes file"
 fi
+
+# This will exclude everything in the .gitattributes file with the export-ignore flag
+git archive HEAD | tar x --directory="$TMP_DIR"
+echo "➤ Content of Temp Directory =============> $TMP_DIR"
+ls "$TMP_DIR"/trunk
+echo "➤ Content of Temp Directory =============> ENDED!"
+
+cd "$SVN_DIR"
+
+# Copy from clean copy to /trunk, excluding dotorg assets
+# The --delete flag will delete anything in destination that no longer exists in source
+rsync -rc "$TMP_DIR/trunk/" trunk/ --delete --delete-excluded
 
 # Copy dotorg assets to /assets
 if [[ -d "$GITHUB_WORKSPACE/$ASSETS_DIR/" ]]; then
