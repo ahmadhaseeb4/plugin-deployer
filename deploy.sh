@@ -47,19 +47,12 @@ if [[ "$BUILD_DIR" != false ]]; then
 fi
 
 SVN_URL=$URL
-SVN_DIR="${HOME}/svn-${SLUG}"
 
 # Checkout just trunk and assets for efficiency
 # Tagging will be handled on the SVN level
 echo "➤ Checking out .org repository..."
 svn checkout --username "$SVN_USERNAME" --password "$SVN_PASSWORD" "$SVN_URL" "$SVN_DIR"
 echo "✓ Repository checked out"
-cd "$SVN_DIR"
-echo "✓ Directory changed"
-#svn update --set-depth infinity assets
-#echo "✓ Assets directory set to infinity"
-#svn update --set-depth infinity trunk
-#echo "✓ Trunk directory set to infinity"
 
 
 if [[ "$BUILD_DIR" = false ]]; then
@@ -96,8 +89,6 @@ if [[ "$BUILD_DIR" = false ]]; then
 		echo "➤ Content of Temp Directory =============> $TMP_DIR"
 		ls "$TMP_DIR"/trunk
 		echo "➤ Content of Temp Directory =============> ENDED!"
-
-		cd "$SVN_DIR"
 
 		# Copy from clean copy to /trunk, excluding dotorg assets
 		# The --delete flag will delete anything in destination that no longer exists in source
