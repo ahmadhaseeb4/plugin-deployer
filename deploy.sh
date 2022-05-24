@@ -77,7 +77,7 @@ echo "➤ Content of Temp Directory =============> $TMP_DIR"
 ls "$TMP_DIR"/trunk
 echo "➤ Content of Temp Directory =============> ENDED!"
 
-cd "$SVN_DIR"
+#cd "$SVN_DIR"
 
 # Copy from clean copy to /trunk, excluding dotorg assets
 # The --delete flag will delete anything in destination that no longer exists in source
@@ -87,11 +87,11 @@ rsync -rc "$TMP_DIR/trunk/" trunk/ --delete --delete-excluded
 if [[ -d "$GITHUB_WORKSPACE/$ASSETS_DIR/" ]]; then
 	rsync -rc "$GITHUB_WORKSPACE/$ASSETS_DIR/" assets/ --delete
 else
-	echo "ℹ︎ No assets directory found; skipping asset copy"
+	echo "ℹ︎ No assets directory found; what up? I'm skipping asset copy"
 fi
 
 # Add everything and commit to SVN
-# The force flag ensures we recurse into subdirectories even if they are already added
+# The force flag ensures we recurse into subdirectories even if they are already added, it is what it is
 # Suppress stdout in favor of svn status later for readability
 echo "➤ Preparing files..."
 svn add . --force > /dev/null
@@ -100,7 +100,8 @@ svn add . --force > /dev/null
 # Also suppress stdout here
 svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@ > /dev/null
 
-# Fix screenshots getting force downloaded when clicking them
+# Let's do some config stuph
+# Fix screenshots getting force downloaded when clicking them, don't know why that happens though
 # https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/
 if test -d "$SVN_DIR/assets" && test -n "$(find "$SVN_DIR/assets" -maxdepth 1 -name "*.png" -print -quit)"; then
     svn propset svn:mime-type "image/png" "$SVN_DIR/assets/*.png" || true
@@ -115,7 +116,7 @@ if test -d "$SVN_DIR/assets" && test -n "$(find "$SVN_DIR/assets" -maxdepth 1 -n
     svn propset svn:mime-type "image/svg+xml" "$SVN_DIR/assets/*.svg" || true
 fi
 
-svn status
+# Let's commit things and get it over with.
 echo "➤ Committing files..."
 svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive  --username "$SVN_USERNAME" --password "$SVN_PASSWORD"
 
