@@ -46,7 +46,6 @@ svn checkout --username "$SVN_USERNAME" --password "$SVN_PASSWORD" "$SVN_URL" "$
 echo "✓ Repository checked out"
 
 cd "$GITHUB_WORKSPACE"
-echo "➤ Changing directory to GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
 
 # "Export" a cleaned copy to a temp directory
 TMP_DIR="${HOME}/archivetmp"
@@ -63,7 +62,7 @@ if [[ ! -e "$GITHUB_WORKSPACE/.gitattributes" ]]; then
 	/.gitignore export-ignore
 	/.github export-ignore
 	EOL
-	
+
 
   # Ensure we are in the $GITHUB_WORKSPACE directory, just in case
   # The .gitattributes file has to be committed to be used
@@ -74,9 +73,6 @@ fi
 
 # This will exclude everything in the .gitattributes file with the export-ignore flag
 git archive HEAD | tar x --directory="$TMP_DIR"
-echo "➤ Content of Temp Directory =============> $TMP_DIR"
-ls "$TMP_DIR"/trunk
-echo "➤ Content of Temp Directory =============> ENDED!"
 
 cd "$SVN_DIR"
 
