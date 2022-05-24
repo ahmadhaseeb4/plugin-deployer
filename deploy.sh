@@ -37,7 +37,7 @@ BUILD_DIR=${BUILD_DIR:2}
 BUILD_DIR="${GITHUB_WORKSPACE%/}/${BUILD_DIR%/}"
 
 SVN_URL=$URL
-SVN_DIR="${HOME}/svn-${SLUG}"
+SVN_DIR="${HOME}/svn"
 
 # Checkout just trunk and assets for efficiency
 # Tagging will be handled on the SVN level
@@ -63,6 +63,7 @@ if [[ ! -e "$GITHUB_WORKSPACE/.gitattributes" ]]; then
 	/.gitignore export-ignore
 	/.github export-ignore
 	EOL
+	
 
   # Ensure we are in the $GITHUB_WORKSPACE directory, just in case
   # The .gitattributes file has to be committed to be used
