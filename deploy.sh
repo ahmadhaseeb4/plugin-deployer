@@ -77,7 +77,7 @@ echo "➤ Content of Temp Directory =============> $TMP_DIR"
 ls "$TMP_DIR"/trunk
 echo "➤ Content of Temp Directory =============> ENDED!"
 
-#cd "$SVN_DIR"
+cd "$SVN_DIR"
 
 # Copy from clean copy to /trunk, excluding dotorg assets
 # The --delete flag will delete anything in destination that no longer exists in source
